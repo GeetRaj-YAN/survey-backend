@@ -42,15 +42,18 @@ app.post('/api/submit-survey', async (req, res) => {
     const accessToken = tokenData.access_token;
 
     // 2. Add Row to Zoho Sheet
+    const now = new Date();
+    const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
     const surveyData = {
-      "Name": data.name,
+      "Full Name": data.name,
       "Overall Experience": data.overall_experience,
       "Trainer Explanation": data.trainer_explanation,
       "Content Usefulness": data.content_usefulness,
       "Session Pace": data.session_pace,
       "Recommend Workshop": data.recommend_workshop,
-      "Future Topic": data.future_topic,
-      "Timestamp": new Date().toLocaleString(),
+      "Future Topic Preference": data.future_topic,
+      "Submission Date ": formattedDate,
     };
 
     const addRowResponse = await fetch(`${sheetUrl}/api/v2/${workbookId}`, {
